@@ -1,0 +1,688 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Happy Birthday Maya 🎉</title>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Gloria+Hallelujah&family=Poppins:wght@300;500&display=swap"
+    rel="stylesheet"
+  />
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    body {
+      font-family: "Poppins", sans-serif;
+      background: linear-gradient(120deg, #ffe4e1, #fff0f5);
+      overflow-x: hidden;
+      transition: all 0.3s ease-in-out;
+      position: relative;
+      color: #6b2c2c;
+    }
+    body.dark {
+      background: linear-gradient(120deg, #1e1e2f, #2a2a40);
+      color: #eee;
+    }
+    .lock-screen,
+    .slider,
+    .popup {
+      display: none;
+    }
+    .lock-screen.active,
+    .slider.active,
+    .popup.show {
+      display: flex;
+    }
+
+    /* Lock Screen */
+    .lock-screen {
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      text-align: center;
+      padding: 2rem;
+      color: #ff69b4;
+      background: transparent;
+    }
+    .lock-screen h2 {
+      font-size: 2.5rem;
+      font-family: "Great Vibes", cursive;
+      margin-bottom: 1rem;
+      animation: pulse 2s infinite;
+      user-select: none;
+    }
+    .lock-screen p {
+      font-family: "Gloria Hallelujah", cursive;
+      font-size: 1.2rem;
+      user-select: none;
+    }
+    .lock-screen input {
+      font-size: 1.5rem;
+      padding: 0.6rem 1rem;
+      border-radius: 0.5rem;
+      border: 2px solid #ff69b4;
+      text-align: center;
+      width: 100px;
+      margin-top: 1rem;
+      outline-offset: 2px;
+    }
+    .lock-screen button {
+      margin-top: 1rem;
+      background: linear-gradient(to right, #ff4b2b, #ff416c);
+      color: white;
+      border: none;
+      padding: 0.8rem 2rem;
+      border-radius: 2rem;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+    .lock-screen button:hover,
+    .lock-screen button:focus {
+      background: linear-gradient(to right, #ff416c, #ff4b2b);
+      outline: none;
+    }
+    .error-msg {
+      color: red;
+      margin-top: 0.5rem;
+      display: none;
+      user-select: none;
+    }
+
+    /* Title & Quote */
+    h1 {
+      font-family: "Great Vibes", cursive;
+      font-size: 3em;
+      text-align: center;
+      color: #ff4081;
+      margin-top: 1rem;
+      user-select: none;
+    }
+    .quote {
+      text-align: center;
+      font-style: italic;
+      margin: 1rem auto;
+      max-width: 600px;
+      color: #cc3366;
+      user-select: none;
+    }
+
+    /* Slider Container */
+    .slider {
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      padding: 2rem 1rem 5rem;
+      gap: 1.8rem;
+      background: transparent;
+      position: relative;
+    }
+
+    /* Sections */
+    .section {
+      display: none;
+      padding: 2rem;
+      min-height: 60vh;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      font-family: "Gloria Hallelujah", cursive;
+      font-size: 1.4rem;
+      max-width: 650px;
+      line-height: 2rem;
+      border-radius: 1rem;
+      box-shadow: 0 0 15px rgba(255, 64, 129, 0.15);
+      background: rgba(255, 64, 129, 0.05);
+      user-select: none;
+      transition: all 0.5s ease;
+    }
+    body.dark .section {
+      color: #ffe4e1;
+      background: rgba(255, 64, 129, 0.15);
+      box-shadow: 0 0 20px rgba(255, 64, 129, 0.4);
+    }
+    .section.active {
+      display: flex;
+      animation: fadeIn 1s ease;
+    }
+
+    /* Reveal Love Letter Button */
+    .reveal-btn {
+      margin-top: 3rem;
+      background: #ff80ab;
+      color: white;
+      border: none;
+      padding: 1rem 2rem;
+      border-radius: 1rem;
+      cursor: pointer;
+      animation: pulse 1.5s infinite;
+      box-shadow: 0 0 10px #ff80ab;
+      user-select: none;
+      transition: background 0.3s ease;
+    }
+    .reveal-btn:hover,
+    .reveal-btn:focus {
+      background: #ff4b80;
+      outline: none;
+      box-shadow: 0 0 20px #ff4b80;
+    }
+
+    /* Popup Love Letter */
+    .popup {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: white;
+      padding: 2rem;
+      border-radius: 1rem;
+      box-shadow: 0 0 20px #ff80ab;
+      font-family: "Gloria Hallelujah", cursive;
+      z-index: 1002;
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      max-width: 90vw;
+      max-height: 80vh;
+      overflow-y: auto;
+      user-select: text;
+    }
+    body.dark .popup {
+      background: #2a2a40;
+      box-shadow: 0 0 30px #ff80ab;
+      color: #ffe4e1;
+    }
+    .popup.show {
+      display: flex;
+      animation: fadeIn 0.5s ease forwards;
+    }
+
+    .letter-text {
+      font-family: "Gloria Hallelujah", cursive;
+      font-size: 1.3rem;
+      line-height: 2rem;
+      white-space: pre-wrap;
+      overflow: hidden;
+      width: 100%;
+      max-width: 500px;
+      color: #6b2c2c;
+      user-select: text;
+    }
+    body.dark .letter-text {
+      color: #ffe4e1;
+    }
+
+    .signature {
+      font-family: "Great Vibes", cursive;
+      font-size: 2rem;
+      margin-top: 2rem;
+      color: #ff69b4;
+      opacity: 0;
+      animation: signatureWrite 2.5s ease-out forwards;
+      user-select: text;
+    }
+
+    .popup button {
+      margin-top: 2rem;
+      padding: 0.4rem 1.2rem;
+      font-size: 0.9rem;
+      border-radius: 1rem;
+      background: #ff80ab;
+      color: white;
+      border: none;
+      cursor: pointer;
+      user-select: none;
+      transition: background 0.3s ease;
+    }
+    .popup button:hover,
+    .popup button:focus {
+      background: #ff4b80;
+      outline: none;
+    }
+
+    /* Navigation Buttons */
+    .next-btn {
+      position: fixed;
+      bottom: 1rem;
+      background: #ffb6c1;
+      color: #333;
+      padding: 0.8rem 1.2rem;
+      border: none;
+      border-radius: 1rem;
+      cursor: pointer;
+      z-index: 100;
+      user-select: none;
+      transition: background 0.3s ease;
+    }
+    .next-btn:hover,
+    .next-btn:focus {
+      background: #ff8aa3;
+      outline: none;
+    }
+    .next-btn[disabled] {
+      opacity: 0.4;
+      cursor: default;
+    }
+    .next-btn.left {
+      left: 1rem;
+    }
+    .next-btn.right {
+      right: 1rem;
+    }
+
+    /* Toggle Theme Button */
+    .toggle-theme {
+      position: fixed;
+      top: 1rem;
+      right: 1rem;
+      background: #ff4081;
+      color: #fff;
+      padding: 0.6rem 1rem;
+      border: none;
+      border-radius: 0.5rem;
+      cursor: pointer;
+      font-family: "Poppins", sans-serif;
+      z-index: 1001;
+      user-select: none;
+      transition: background 0.3s ease;
+    }
+    .toggle-theme:hover,
+    .toggle-theme:focus {
+      background: #e0306c;
+      outline: none;
+    }
+
+    /* Footer */
+    .footer {
+      text-align: center;
+      margin-top: 3rem;
+      padding: 1rem;
+      font-size: 1rem;
+      color: #999;
+      user-select: none;
+    }
+    body.dark .footer {
+      color: #bbb;
+    }
+
+    /* Canvas Fullscreen */
+    canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 999;
+    }
+
+    /* Floating Emoji Effects */
+    .heart,
+    .sparkle,
+    .snowflake {
+      position: fixed;
+      bottom: -20px;
+      font-size: 1.5rem;
+      animation: floatEffect 6s linear infinite;
+      pointer-events: none;
+      z-index: 10;
+      user-select: none;
+      will-change: transform, opacity;
+    }
+    .sparkle {
+      color: #ffd700;
+      animation-duration: 4s;
+    }
+    .snowflake {
+      color: #cceeff;
+      font-size: 1.2rem;
+      animation-duration: 7s;
+    }
+
+    /* Voice Slide Button */
+    #voiceBtn {
+      background: #ff80ab;
+      color: white;
+      border: none;
+      padding: 1rem 2rem;
+      border-radius: 1rem;
+      cursor: pointer;
+      animation: pulse 1.5s infinite;
+      box-shadow: 0 0 10px #ff80ab;
+      font-family: "Gloria Hallelujah", cursive;
+      font-size: 1.3rem;
+      user-select: none;
+      transition: background 0.3s ease;
+    }
+    #voiceBtn:hover,
+    #voiceBtn:focus {
+      background: #ff4b80;
+      outline: none;
+      box-shadow: 0 0 20px #ff4b80;
+    }
+
+    /* Animations */
+    @keyframes floatEffect {
+      0% {
+        transform: translateY(0) scale(1);
+        opacity: 1;
+      }
+      100% {
+        transform: translateY(-100vh) scale(1.5);
+        opacity: 0;
+      }
+    }
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    @keyframes pulse {
+      0%,
+      100% {
+        transform: scale(1);
+      }
+      50% {
+        transform: scale(1.1);
+      }
+    }
+    @keyframes signatureWrite {
+      0% {
+        opacity: 0;
+        transform: translateX(-50px) scale(0.8);
+      }
+      100% {
+        opacity: 1;
+        transform: translateX(0) scale(1);
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Theme Toggle Button -->
+  <button class="toggle-theme" onclick="toggleTheme()">🌓 Toggle Theme</button>
+
+  <!-- Background Music -->
+  <audio autoplay loop id="bgMusic" volume="0.3" preload="auto">
+    <source
+      src="https://cdn.pixabay.com/download/audio/2023/03/06/audio_f2119a6a1c.mp3"
+      type="audio/mpeg"
+    />
+  </audio>
+
+  <!-- Secret Gateway Lock Screen -->
+  <div class="lock-screen active" id="lockScreen">
+    <h2>🔒 Secret Gateway</h2>
+    <p>Enter the code to unlock my heart 💕</p>
+    <input
+      type="text"
+      id="codeInput"
+      maxlength="3"
+      placeholder="💗💗💗"
+      aria-label="Enter secret code"
+      autocomplete="off"
+    />
+    <br />
+    <button onclick="checkCode()">❤️ Unlock My Heart</button>
+    <p class="error-msg" id="errorMsg" role="alert">❌ Wrong code, try again!</p>
+  </div>
+
+  <!-- Main Slider -->
+  <div class="slider" id="slider" role="region" aria-live="polite" aria-label="Birthday Messages">
+    <h1>Happy Birthday Maya 🎉</h1>
+    <p class="quote">"You make the world brighter just by being in it."</p>
+
+    <div class="section active" tabindex="0">
+      🎂 On this special day, the universe pauses to celebrate you. Your existence adds meaning to mine.
+    </div>
+    <div class="section" tabindex="0">
+      🌌 You're not just beautiful on the outside, but breathtaking within. Today, we celebrate all that you are. 💖
+    </div>
+    <div class="section" tabindex="0">
+      🌠 My world began spinning in color the day you walked into it. You are my life. 🥺
+    </div>
+    <div class="section" tabindex="0">
+      🎶 Your laughter is the rhythm I live for. I'd write your name on every heartbeat. ❤️
+    </div>
+
+    <!-- Voice Message Slide -->
+    <div class="section" tabindex="0">
+      🎤 Personal Voice Message<br /><br />
+      <button id="voiceBtn" aria-pressed="false" aria-label="Play voice message">▶️ Play Voice Message</button>
+      <audio
+        id="voiceMsg"
+        src="https://cdn.pixabay.com/download/audio/2022/08/28/audio_12345.mp3"
+        preload="auto"
+      ></audio>
+    </div>
+
+    <div class="section" tabindex="0">
+      🦋 You are grace wrapped in stardust. I fall for you every single day. 🌷
+    </div>
+    <div class="section" tabindex="0">
+      With all my heart and soul, forever yours,<br /><strong>sparsh</strong> 💌
+      <div style="margin-top: 2rem;">
+        <button class="reveal-btn" onclick="showPopup(); firework()">
+          💌 Reveal Love Letter 💌
+        </button>
+      </div>
+    </div>
+
+    <!-- Navigation Buttons -->
+    <button
+      class="next-btn left"
+      id="prevBtn"
+      aria-label="Previous slide"
+      onclick="prevSlide()"
+      disabled
+    >
+      ⬅️ Prev
+    </button>
+    <button
+      class="next-btn right"
+      id="nextBtn"
+      aria-label="Next slide"
+      onclick="nextSlide()"
+    >
+      Next ➡️
+    </button>
+
+    <div class="footer">© 2025 Made with ❤️ by Sparsh</div>
+  </div>
+
+  <!-- Love Letter Popup -->
+  <div class="popup" id="popup" role="dialog" aria-modal="true" aria-labelledby="popupTitle" aria-describedby="typedText">
+    <div class="letter-text" id="typedText"></div>
+    <span id="signature" class="signature" style="display: none;">— sparsh 💌</span>
+    <button onclick="hidePopup()" aria-label="Close love letter popup">Close</button>
+  </div>
+
+  <!-- Confetti Canvas -->
+  <canvas id="confettiCanvas"></canvas>
+
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
+  <script>
+    const sections = document.querySelectorAll(".section");
+    let current = 0;
+
+    // Audio Elements
+    const bgMusic = document.getElementById("bgMusic");
+    const voiceMsg = document.getElementById("voiceMsg");
+    const voiceBtn = document.getElementById("voiceBtn");
+
+    // Secret gateway code check
+    function checkCode() {
+      const code = document.getElementById("codeInput").value.trim();
+      if (code === "143") {
+        document.getElementById("lockScreen").classList.remove("active");
+        document.getElementById("slider").classList.add("active");
+        document.getElementById("errorMsg").style.display = "none";
+        playBgMusic();
+        updateNavButtons();
+        sections[current].focus();
+      } else {
+        document.getElementById("errorMsg").style.display = "block";
+      }
+    }
+
+    // Show slide by index
+    function showSlide(index) {
+      sections.forEach((s, i) => s.classList.toggle("active", i === index));
+      current = index;
+      updateNavButtons();
+      sections[current].focus();
+    }
+
+    // Next slide handler
+    function nextSlide() {
+      if (current < sections.length - 1) {
+        current++;
+        showSlide(current);
+      }
+    }
+
+    // Prev slide handler
+    function prevSlide() {
+      if (current > 0) {
+        current--;
+        showSlide(current);
+      }
+    }
+
+    // Update nav buttons enable/disable
+    function updateNavButtons() {
+      document.getElementById("prevBtn").disabled = current === 0;
+      document.getElementById("nextBtn").disabled = current === sections.length - 1;
+    }
+
+    // Love letter popup
+    function showPopup() {
+      const popup = document.getElementById("popup");
+      const target = document.getElementById("typedText");
+      const signature = document.getElementById("signature");
+
+      popup.classList.add("show");
+      target.innerText = "";
+      signature.style.display = "none";
+
+      const text = `Dear Maya,
+
+Your love is the light in my world. Every second with you is magic.
+I promise to love you beyond limits. 💖`;
+
+      let i = 0;
+      function type() {
+        if (i < text.length) {
+          target.innerText += text.charAt(i);
+          i++;
+          setTimeout(type, 50);
+        } else {
+          setTimeout(() => {
+            signature.style.display = "inline-block";
+          }, 300);
+        }
+      }
+      setTimeout(type, 200);
+    }
+
+    function hidePopup() {
+      document.getElementById("popup").classList.remove("show");
+    }
+
+    // Theme toggle
+    function toggleTheme() {
+      document.body.classList.toggle("dark");
+    }
+
+    // Confetti fireworks
+    function firework() {
+      confetti({
+        particleCount: 150,
+        spread: 90,
+        origin: { y: 0.6 },
+      });
+    }
+
+    // Floating effects
+    function spawnEffect(type, char) {
+      const el = document.createElement("div");
+      el.className = type;
+      el.textContent = char;
+      el.style.left = Math.random() * 100 + "vw";
+      el.style.animationDuration = 5 + Math.random() * 3 + "s";
+      document.body.appendChild(el);
+      setTimeout(() => el.remove(), 8000);
+    }
+    setInterval(() => spawnEffect("heart", "💗"), 1200);
+    setInterval(() => spawnEffect("sparkle", "✨"), 1800);
+    setInterval(() => spawnEffect("snowflake", "❄️"), 2200);
+
+    // Voice message play/pause toggle with bg music pause/resume
+    voiceBtn.addEventListener("click", () => {
+      if (voiceMsg.paused) {
+        voiceMsg.play();
+        voiceBtn.textContent = "⏸️ Pause Voice Message";
+        voiceBtn.setAttribute("aria-pressed", "true");
+        if (!bgMusic.paused) bgMusic.pause();
+      } else {
+        voiceMsg.pause();
+        voiceBtn.textContent = "▶️ Play Voice Message";
+        voiceBtn.setAttribute("aria-pressed", "false");
+        bgMusic.play().catch(() => {});
+      }
+    });
+
+    voiceMsg.addEventListener("ended", () => {
+      voiceBtn.textContent = "▶️ Play Voice Message";
+      voiceBtn.setAttribute("aria-pressed", "false");
+      bgMusic.play().catch(() => {});
+    });
+
+    voiceMsg.addEventListener("pause", () => {
+      voiceBtn.textContent = "▶️ Play Voice Message";
+      voiceBtn.setAttribute("aria-pressed", "false");
+      bgMusic.play().catch(() => {});
+    });
+
+    // Play background music safely (mute if needed)
+    function playBgMusic() {
+      bgMusic
+        .play()
+        .then(() => {
+          bgMusic.volume = 0.3;
+        })
+        .catch(() => {
+          bgMusic.muted = true; // fallback mute autoplay policy
+        });
+    }
+
+    // Keyboard navigation support for slides & lock screen
+    document.addEventListener("keydown", (e) => {
+      if (!document.getElementById("lockScreen").classList.contains("active")) {
+        if (e.key === "ArrowRight") nextSlide();
+        if (e.key === "ArrowLeft") prevSlide();
+        if (e.key === "Escape") hidePopup();
+      }
+      if (e.key === "Enter" && document.getElementById("lockScreen").classList.contains("active")) {
+        checkCode();
+      }
+    });
+
+    // Initialize first slide focus if unlocked
+    if (!document.getElementById("lockScreen").classList.contains("active")) {
+      sections[0].focus();
+      updateNavButtons();
+    }
+  </script>
+</body>
+</html>
